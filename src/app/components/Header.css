@@ -1,0 +1,14 @@
+.member-login::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    top: 100%;
+    left: 0;
+    height: 3px;
+    background-color: white;
+    transition: width 0.4s ease-in-out;
+}
+
+.member-login:hover::after {
+    width: 100%;
+}
