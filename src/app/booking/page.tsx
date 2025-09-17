@@ -22,7 +22,24 @@ import { Range } from "react-date-range";
 import { differenceInDays } from "date-fns";
 import MyBooking from "../components/MyBooking";
 import { rooms } from "../data/room"
+
+type Room = {
+    id: number;
+    name: string;
+    guest: number,
+    Adult: number,
+    Children: number,
+    space: number,
+    petAllow: boolean,
+    wifi: boolean,
+    bed: string,
+    phone: boolean,
+    description?: string,
+    price: number,
+    imgUrl: string,
+}
 export default function Booking() {
+    const [selectedRoom, setSelectedRoom] = useState<Room>();
     const searchParams = useSearchParams();
     const start = searchParams.get("start");
     const end = searchParams.get("end");
@@ -75,97 +92,126 @@ export default function Booking() {
             <div className="h-3 bg-rose-500 w-full mx-auto container  "></div>
 
             <div className="grid grid-cols-12 container mx-auto py-20 px-20 bg-[rgb(250,247,245)] gap-10">
-                <div className="col-span-9 border border-none bg-white p-10 rounded-md">
-                    <div {rooms.map((room) => ()} className="grid grid-cols-12 gap-10">
-                        <div className="col-span-3 mt-10">
-                            <img src="room.jpg" alt="" />
-                        </div>
-                        <div className="col-span-9">
-                            <div className="text-rose-500 font-semibold underline mb-5">TRAV Lite Twin</div>
-                            <div className="mb-5">
-                                <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <FontAwesomeIcon icon={faUserFriends} size="lg" />
-                                    <span className="ml-3">Up to 2 guests</span>
-                                </span>
-                                <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <FontAwesomeIcon icon={faArrowsLeftRight} size="lg" className="-rotate-45" />
-                                    <span className="ml-3">20 m<sup>2</sup></span>
-                                </span>
-                            </div>
-                            <div className="mb-5">
-                                <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <FontAwesomeIcon icon={faPaw} size="lg" />
-                                    <span className="ml-3">Pets allowed</span>
-                                </span>
-                                <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <FontAwesomeIcon icon={faWifi} size="lg" className="-rotate-45" />
-                                    <span className="ml-3">Wi-Fi</span>
-                                </span>
-                                <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <FontAwesomeIcon icon={faSnowflake} size="lg" />
-                                    <span className="ml-3">Wi-Fi</span>
-                                </span>
-                            </div>
-                            <div>
-                                <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <FontAwesomeIcon icon={faBed} size="lg" />
-                                    <span className="ml-3">Pets allowed</span>
-                                </span>
-                                <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <FontAwesomeIcon icon={faPhone} size="lg" className="-rotate-45" />
-                                    <span className="ml-3">Phone</span>
-                                </span>
-                                <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
-                                    <span className="ml-3">+15</span>
-                                </span>
-                            </div>
-                            <div className="mt-10">Birds of a feather stay together in our urban view twin room on a low floor</div>
-                            <div className="ml-100 cursor-pointer border w-30 text-center rounded-full my-5">Show more</div>
-                        </div>
-                    </div>
-                    <div className="border-t-1 bg-gray-500"></div>
-                    <div className="grid grid-cols-12">
-                        <div className="col-span-6 my-10">
-                            <div className="text-rose-500 font-semibold mb-3">Room and BreakFast</div>
-                            <div className="mb-5">
-                                <FontAwesomeIcon icon={faUtensils} size="lg" />
-                                <span className="ml-2">Breakfast : <b>Include</b></span>
-                            </div>
-                            <div className="mb-5">
-                                <FontAwesomeIcon icon={faRotateLeft} size="lg" />
-                                <span className="ml-2">Cancellatio policy</span>
-                            </div>
-                            <div className="mb-5">
-                                <FontAwesomeIcon icon={faMoneyBill} size="lg" />
-                                <span className="ml-2">Payment : bank card</span>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon={faGift} size="lg" />
-                                <span className="ml-2"><b>Include</b>{`: TRAVSTAY Anytime: 24/7 Perks Thatm Don't Sleep`}</span>
-                            </div>
-                        </div>
-                        <div className="col-span-6 my-10">
-                            <div className="text-xl font-bold text-right">Price for 1 night</div>
-                            <div className="grid grid-cols-12 ">
-                                <div className="col-span-6">
+                {/* Danh sách room */}
+                <div className="col-span-9 space-y-10">
+                    {rooms.map((room) => (
+                        <div key={room.id} className="border border-none bg-white p-10 rounded-md">
+                            <div className="grid grid-cols-12 gap-10">
+                                <div className="col-span-3 mt-10">
+                                    <img src={room.imgUrl} alt="" />
+                                </div>
+                                <div className="col-span-9">
+                                    <div className="text-rose-500 font-semibold underline mb-5">{room.name}</div>
+                                    <div className="mb-5">
+                                        <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <FontAwesomeIcon icon={faUserFriends} size="lg" />
+                                            <span className="ml-3">Up to {room.guest} guests</span>
+                                        </span>
+                                        <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <FontAwesomeIcon icon={faArrowsLeftRight} size="lg" className="-rotate-45" />
+                                            <span className="ml-3">{room.space} m<sup>2</sup></span>
+                                        </span>
+                                    </div>
+                                    <div className="mb-5">
+                                        <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <FontAwesomeIcon icon={faPaw} size="lg" />
+                                            <span className="ml-3">{room.petAllow ? "Pet Allowed" : "Pet Denied"}</span>
+                                        </span>
+                                        <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <FontAwesomeIcon icon={faWifi} size="lg" />
+                                            <span className="ml-3">Wi-Fi</span>
+                                        </span>
+                                        <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <FontAwesomeIcon icon={faSnowflake} size="lg" />
+                                            <span className="ml-3">Aircondition</span>
+                                        </span>
+                                    </div>
                                     <div>
-                                        <span className="border p-2 rounded-md px-4 bg-rose-500 text-white">-10%</span>
-                                        <span className="ml-5 text-lg font-semibold line-through">1.700.000 đ</span>
-                                        <div className="mt-5 ml-18">
-                                            <FontAwesomeIcon icon={faDollarSign}></FontAwesomeIcon>
-                                            <span className="text-lg font-semibold">1.530.000 đ</span>
+                                        <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <FontAwesomeIcon icon={faBed} size="lg" />
+                                            <span className="ml-3">{room.bed}</span>
+                                        </span>
+                                        <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <FontAwesomeIcon icon={faPhone} size="lg" />
+                                            <span className="ml-3">{room.phone ? "Phone" : "No Phone"}</span>
+                                        </span>
+                                        <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
+                                            <span className="ml-3">+15</span>
+                                        </span>
+                                    </div>
+                                    <div className="mt-10">
+                                        Birds of a feather stay together in our urban view twin room on a low floor
+                                    </div>
+                                    <div className="ml-100 cursor-pointer border w-30 text-center rounded-full my-5">Show more</div>
+                                </div>
+                            </div>
+
+                            <div className="border-t-1 bg-gray-500"></div>
+
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-6 my-10">
+                                    <div className="text-rose-500 font-semibold mb-3">Room and BreakFast</div>
+                                    <div className="mb-5">
+                                        <FontAwesomeIcon icon={faUtensils} size="lg" />
+                                        <span className="ml-2">Breakfast : <b>Include</b></span>
+                                    </div>
+                                    <div className="mb-5">
+                                        <FontAwesomeIcon icon={faRotateLeft} size="lg" />
+                                        <span className="ml-2">Cancellation policy</span>
+                                    </div>
+                                    <div className="mb-5">
+                                        <FontAwesomeIcon icon={faMoneyBill} size="lg" />
+                                        <span className="ml-2">Payment : bank card</span>
+                                    </div>
+                                    <div>
+                                        <FontAwesomeIcon icon={faGift} size="lg" />
+                                        <span className="ml-2"><b>Include</b>: TRAVSTAY Anytime: 24/7 Perks That {`Don't`} Sleep</span>
+                                    </div>
+                                </div>
+
+                                <div className="col-span-6 my-10">
+                                    <div className="text-xl font-bold text-right">Price for 1 night</div>
+                                    <div className="grid grid-cols-12">
+                                        <div className="col-span-6">
+                                            <div>
+                                                <span className="border p-2 rounded-md px-4 bg-rose-500 text-white">-10%</span>
+                                                <span className="ml-5 text-lg font-semibold line-through">
+                                                    {room.price.toLocaleString()} đ
+                                                </span>
+                                                <div className="mt-5 ml-18">
+                                                    <FontAwesomeIcon icon={faDollarSign} />
+                                                    <span className="text-lg font-semibold">
+                                                        {(room.price * 0.9).toLocaleString()} đ
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            className="ml-25 mt-10 col-span-6 border w-35 h-15 text-center bg-rose-500 rounded-md text-white cursor-pointer"
+                                            onClick={() => setSelectedRoom(room)}
+                                        >
+                                            Select
                                         </div>
                                     </div>
                                 </div>
-                                <div className="ml-25 mt-10 rcol-span-6 border w-35 text- h-15 text-lg/15 text-center bg-rose-500 rounded-md border-none text-white">Select</div>
                             </div>
                         </div>
+                    ))}
+                </div>
+
+                {/* Sidebar MyBooking */}
+                <div className="col-span-3">
+                    <div className="sticky top-5">
+                        <MyBooking
+                            datedif={datedif}
+                            start={range[0].startDate}
+                            end={range[0].endDate}
+                            room={selectedRoom}
+                        />
                     </div>
                 </div>
-                <div className="col-span-3 bg-white">
-                    <MyBooking datedif={datedif} start={range[0].startDate} end={range[0].endDate} />
-                </div>
-            </div >
+            </div>
+
         </>
 
     )

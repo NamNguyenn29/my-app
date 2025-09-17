@@ -1,27 +1,97 @@
-
 import "../globals.css"
 
 interface MyBookingProps {
     datedif: number;
     start: Date;
     end: Date;
+    room?: Room;
 }
 
-export default function MyBooking({ datedif, start, end }: MyBookingProps) {
+interface Room {
+    id: number;
+    name: string;
+    guest: number;
+    Adult: number;
+    Children: number;
+    space: number;
+    petAllow: boolean;
+    wifi: boolean;
+    bed: string;
+    phone: boolean;
+    description?: string;
+    price: number;
+    imgUrl: string;
+}
+
+export default function MyBooking({ datedif, start, end, room }: MyBookingProps) {
+    const totalPrice = room ? room.price * datedif : 0;
+
+    // Hàm chuyển số tháng sang chữ
+    const formatDate = (date: Date) => {
+        return date.toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "short", // "short" → Jan, Feb | "long" → January, February
+        });
+    };
+
     return (
-        <>
-            <div className="bg-[rgb(253,233,230)] p-7 rounded-t-lg ">
+        <div className="col-span-3 border border-gray-200 bg-white rounded-lg shadow-md">
+            {/* Header */}
+            <div className="bg-[rgb(253,233,230)] p-4 rounded-t-lg font-semibold text-xl">
                 My Booking
             </div>
-            <div className="mt-10 ml-10">
-                <div className="bg-[rgb(253,233,230)] p-3 w-58 mb-5">{datedif} night</div>
-                <div className="grid grid-cols-12 ">
-                    <div className="text-xl col-span-6" >
-                        <div>{start.getDate()} - {start.getMonth()}</div>
-                    </div>
-                    <div className="text-xl col-span-6" >{start.getDate()} - {start.getMonth()}</div>
+
+            {/* Date & Nights */}
+            <div className="p-5">
+                <div className="font-semibold bg-[rgb(253,233,230)] p-2 rounded text-center text-xl font-medium mb-4">
+                    {datedif} Night{datedif > 1 ? "s" : ""}
                 </div>
+
+                <div className="grid grid-cols-2 text-center text-gray-700 text-lg mb-6">
+                    <div>
+                        <div className="font-semibold">Check-in</div>
+                        <div>{formatDate(start)}</div>
+                    </div>
+                    <div>
+                        <div className="font-semibold">Check-out</div>
+                        <div>{formatDate(end)}</div>
+                    </div>
+                </div>
+
+                {/* Room Info */}
+                {room ? (
+                    <div className="flex flex-col items-center">
+                        <img
+                            src={room.imgUrl}
+                            alt={room.name}
+                            className="w-48 h-32 object-cover rounded-md mb-3"
+                        />
+                        <div className="text-xl font-semibold">{room.name}</div>
+                        <div className="text-gray-600 text-lg">
+                            Guests: {room.guest} | {room.bed}
+                        </div>
+                        <div className="text-gray-500 text-lg mt-1">
+                            {room.space} m² • {room.wifi ? "Wifi" : "No Wifi"}
+                        </div>
+
+                        {/* Price */}
+                        <div className="mt-4 w-full border-t pt-3 text-right">
+                            <div className="text-lg text-gray-500">Price per night</div>
+                            <div className="text-rose-500 font-bold text-lg">
+                                {room.price.toLocaleString()} đ
+                            </div>
+                            <div className="text-lg mt-2">
+                                Total:{" "}
+                                <span className="font-semibold">
+                                    {totalPrice.toLocaleString()} đ
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="text-gray-500 text-center">No room selected</div>
+                )}
             </div>
-        </>
-    )
+        </div>
+    );
 }
