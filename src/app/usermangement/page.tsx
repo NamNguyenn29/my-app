@@ -114,7 +114,18 @@ export default function UserMangement() {
             </table>
 
             <Modal open={!!selectedUser} onClose={() => setSelectedUser(null)}>
-                <Box sx={{ p: 4, bgcolor: "rgb(100,116,139)", borderRadius: 2, width: 1400, mx: "auto", mt: 10 }}>
+                <Box
+                    sx={{
+                        p: 4,
+                        bgcolor: "rgb(100,116,139)",
+                        borderRadius: 2,
+                        width: 1400,
+                        mx: "auto",
+                        mt: 5,
+                        maxHeight: "90vh",   // giới hạn chiều cao modal
+                        overflowY: "auto",   // bật thanh cuộn dọc
+                    }}
+                >
                     {selectedUser && (
                         <div className="grid grid-cols-12 gap-10 text-xl">
                             <div className="rounded-lg col-span-5 bg-white p-10 h-100 flex gap-10 relative">
@@ -187,7 +198,15 @@ export default function UserMangement() {
                             <div className=" col-start-6 col-span-7 bg-white p-10 h-60 text-xl rounded">b</div>
                         </div>
                     )}
-                    <Button onClick={() => setSelectedUser(null)} className="!text-black font-bold">Đóng</Button>
+                    <div className="flex justify-end mt-6">
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => setSelectedUser(null)}
+                        >
+                            Close
+                        </Button>
+                    </div>
                 </Box>
             </Modal>
 

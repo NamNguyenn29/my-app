@@ -1,5 +1,5 @@
 import "../globals.css"
-
+import RoomSlider from "../components/RoomSlider";
 interface MyBookingProps {
     datedif: number;
     start: Date;
@@ -20,7 +20,7 @@ interface Room {
     phone: boolean;
     description?: string;
     price: number;
-    imgUrl: string;
+    imgUrls: string[];
 }
 
 export default function MyBooking({ datedif, start, end, room }: MyBookingProps) {
@@ -61,11 +61,7 @@ export default function MyBooking({ datedif, start, end, room }: MyBookingProps)
                 {/* Room Info */}
                 {room ? (
                     <div className="flex flex-col items-center">
-                        <img
-                            src={room.imgUrl}
-                            alt={room.name}
-                            className="w-48 h-32 object-cover rounded-md mb-3"
-                        />
+                        <RoomSlider images={room.imgUrls} alt={room.name} />
                         <div className="text-xl font-semibold">{room.name}</div>
                         <div className="text-gray-600 text-lg">
                             Guests: {room.guest} | {room.bed}
@@ -87,6 +83,7 @@ export default function MyBooking({ datedif, start, end, room }: MyBookingProps)
                                 </span>
                             </div>
                         </div>
+                        <div className="bg-rose-400 px-10 py-3 rounded-lg text-white font-bold text-xl cursor-pointer hover:bg-blue-900" >Continue</div>
                     </div>
                 ) : (
                     <div className="text-gray-500 text-center">No room selected</div>
