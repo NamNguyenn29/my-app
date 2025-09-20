@@ -25,6 +25,7 @@ import { rooms } from "../data/room"
 import RoomSlider from "../components/RoomSlider";
 import { Modal, Box } from "@mui/material";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 type Room = {
     id: number;
     name: string;
@@ -32,13 +33,11 @@ type Room = {
     Adult: number,
     Children: number,
     space: number,
-    petAllow: boolean,
-    wifi: boolean,
     bed: string,
-    phone: boolean,
     description?: string,
     price: number,
     imgUrls: string[],
+    services: string[],
 }
 export default function Booking() {
     const [selectedRoomDetail, setSelectedRoomDetail] = useState<Room | null>(null);
@@ -85,10 +84,11 @@ export default function Booking() {
                     </div>
                     <div className="col-span-4 text-center p-20 grid grid-cols-12">
                         <div className="col-span-4 bg-[rgb(217,217,217)]  text-center  text-lg/20 w-20 h-20 rounded-full">NN</div>
-                        <div className="col-span-6 text-left text-xl font-semibold  pt-2">
+                        <div className="col-span-4 text-left text-xl font-semibold  pt-2">
                             <div>Profile</div>
                             <FontAwesomeIcon icon={faUser} size="xl" />
                         </div>
+                        <div className="col-span-4 -ml-30 mt-5"><FontAwesomeIcon icon={faBars} size="2xl" className="item-self-center" /></div>
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@ export default function Booking() {
                                     <div className="mb-5">
                                         <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
                                             <FontAwesomeIcon icon={faPaw} size="lg" />
-                                            <span className="ml-3">{room.petAllow ? "Pet Allowed" : "Pet Denied"}</span>
+                                            <span className="ml-3">Pet Allowed</span>
                                         </span>
                                         <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
                                             <FontAwesomeIcon icon={faWifi} size="lg" />
@@ -136,7 +136,7 @@ export default function Booking() {
                                         </span>
                                         <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
                                             <FontAwesomeIcon icon={faPhone} size="lg" />
-                                            <span className="ml-3">{room.phone ? "Phone" : "No Phone"}</span>
+                                            <span className="ml-3">Phone</span>
                                         </span>
                                         <span className="ml-5 bg-[rgb(243,244,246)] p-2 rounded-md">
                                             <span className="ml-3">+15</span>
@@ -271,7 +271,7 @@ export default function Booking() {
                     <div className="flex flex-wrap gap-4 mb-6">
                         <span className="bg-gray-100 px-3 py-2 rounded-md">
                             <FontAwesomeIcon icon={faPaw} />{" "}
-                            {selectedRoomDetail?.petAllow ? "Pets allowed" : "Pets denied"}
+                            Pet Allowed
                         </span>
                         <span className="bg-gray-100 px-3 py-2 rounded-md">
                             <FontAwesomeIcon icon={faWifi} /> Wi-Fi
@@ -284,7 +284,7 @@ export default function Booking() {
                         </span>
                         <span className="bg-gray-100 px-3 py-2 rounded-md">
                             <FontAwesomeIcon icon={faPhone} />{" "}
-                            {selectedRoomDetail?.phone ? "Phone" : "No phone"}
+                            Phone
                         </span>
                     </div>
 

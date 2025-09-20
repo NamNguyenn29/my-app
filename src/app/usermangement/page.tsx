@@ -55,6 +55,7 @@ export default function UserMangement() {
 
     return (
         <>
+            <div className="text-center text-5xl text-white bg-black font-semibold  p-10">User Mangement</div>
             <div className="my-20 h-2 container mx-auto bg-black "></div>
             <form className="flex justify-start gap-5 p-2 w-96 container mx-20 mb-10">
                 <input

@@ -20,6 +20,7 @@ export default function SupportRequest() {
     }
     return (
         <>
+
             <div className="text-center text-5xl text-white bg-black font-semibold  p-10">Support Request</div>
             <div className="container mx-auto my-30 px-20">
                 <div className="text-5xl text-blue-900 font-semibold mb-10">WE ARE HERE FOR YOU</div>
