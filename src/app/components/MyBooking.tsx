@@ -14,13 +14,13 @@ interface Room {
     Adult: number;
     Children: number;
     space: number;
-    petAllow: boolean;
-    wifi: boolean;
     bed: string;
-    phone: boolean;
     description?: string;
     price: number;
     imgUrls: string[];
+    services: string[];
+    status: string,
+    roomType: string,
 }
 
 export default function MyBooking({ datedif, start, end, room }: MyBookingProps) {
@@ -67,7 +67,7 @@ export default function MyBooking({ datedif, start, end, room }: MyBookingProps)
                             Guests: {room.guest} | {room.bed}
                         </div>
                         <div className="text-gray-500 text-lg mt-1">
-                            {room.space} m² • {room.wifi ? "Wifi" : "No Wifi"}
+                            {room.space} m² • wifi
                         </div>
 
                         {/* Price */}

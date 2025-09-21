@@ -38,6 +38,8 @@ type Room = {
     price: number,
     imgUrls: string[],
     services: string[],
+    roomType: string,
+    status: string,
 }
 export default function Booking() {
     const [selectedRoomDetail, setSelectedRoomDetail] = useState<Room | null>(null);
@@ -289,7 +291,8 @@ export default function Booking() {
                     </div>
 
                     {/* Fixed tiện ích */}
-                    <div className="grid grid-cols-3 gap-6 bg-gray-50 p-6 rounded-md">
+                    {/* Services + tiện ích khác */}
+                    <div className="grid grid-cols-4 gap-6 bg-gray-50 p-6 rounded-md">
                         <div>
                             <h3 className="font-semibold mb-2">Pet-friendly</h3>
                             <p>Pets allowed</p>
@@ -298,6 +301,7 @@ export default function Booking() {
                             <p>Flat-screen TV</p>
                             <p>Cable television</p>
                         </div>
+
                         <div>
                             <h3 className="font-semibold mb-2">Electronic devices</h3>
                             <p>Air conditioning</p>
@@ -307,14 +311,24 @@ export default function Booking() {
                             <h3 className="font-semibold mt-4 mb-2">Bathroom</h3>
                             <p>Shower</p>
                         </div>
+
                         <div>
-                            <h3 className="font-semibold mb-2">Electronic devices</h3>
+                            <h3 className="font-semibold mb-2">Furniture</h3>
                             <p>Desk</p>
                             <p>Wardrobe</p>
                             <p>Chair</p>
                             <p>Mirror</p>
                         </div>
+
+                        {/* Cột mới: Services */}
+                        <div>
+                            <h3 className="font-semibold mb-2">Services</h3>
+                            {selectedRoomDetail?.services?.map((service, index) => (
+                                <p key={index}>{service}</p>
+                            ))}
+                        </div>
                     </div>
+
 
                     {/* Close button */}
                     <div className="flex justify-end mt-6">

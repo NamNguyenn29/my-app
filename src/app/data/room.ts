@@ -9,6 +9,8 @@ export const rooms = [
         bed: "2 single beds",
         description: "Phòng đôi gọn gàng, thoáng mát, thích hợp cho 2 người.",
         price: 1700000,
+        status: "active",
+        roomType: "regular",
         imgUrls: [
             "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
             "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
@@ -17,9 +19,9 @@ export const rooms = [
 
         ],
         services: [
-            "high wifi",
-            "spa ",
-            "bacony",
+            "High wifi",
+            "Spa ",
+            "Gym",
 
         ]
     },
@@ -33,6 +35,8 @@ export const rooms = [
         bed: "1 king bed",
         description: "Phòng sang trọng với giường lớn, phù hợp cho cặp đôi.",
         price: 2500000,
+        status: "active",
+        roomType: "regular",
         imgUrls: [
             "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
             "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
@@ -41,9 +45,9 @@ export const rooms = [
 
         ],
         services: [
-            "high wifi",
-            "spa ",
-            "swimming pool",
+            "High wifi",
+            "Spa ",
+            "Swimming pool",
 
         ]
     },
@@ -57,6 +61,8 @@ export const rooms = [
         bed: "2 queen beds",
         description: "Phòng rộng rãi dành cho gia đình hoặc nhóm bạn.",
         price: 3500000,
+        status: "active",
+        roomType: "regular",
         imgUrls: [
 
             "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
@@ -65,9 +71,9 @@ export const rooms = [
             "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2"
         ],
         services: [
-            "high wifi",
-            "spa ",
-            "rooftop bar",
+            "High wifi",
+            "Spa ",
+            "Rooftop bar",
 
         ]
     },
@@ -81,6 +87,8 @@ export const rooms = [
         bed: "1 king bed",
         description: "Phòng cao cấp với view toàn cảnh, tiện nghi hiện đại.",
         price: 5000000,
+        status: "active",
+        roomType: "regular",
         imgUrls: [
             "https://images.unsplash.com/photo-1590490360182-c33d57733427",
             "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
@@ -90,10 +98,35 @@ export const rooms = [
         ],
 
         services: [
-            "high wifi",
-            "swimming pool ",
-            "rooftop bar",
+            "High wifi",
+            "Swimming pool ",
+            "Rooftop bar",
+            "Gym",
 
         ]
-    }
+    },
+    ...Array.from({ length: 20 }).map((_, i) => {
+        const id = i + 6;
+        const types = ["Deluxe", "Suite", "Standard", "Family"];
+        const statuses = ["Available", "Booked", "Maintenance"];
+        const beds = ["1 King Bed", "2 Single Beds", "2 Queen Beds", "3 Beds"];
+        return {
+            id,
+            name: `${types[i % types.length]} Room #${id}`,
+            guest: 2 + (i % 5),
+            Adult: 1 + (i % 3),
+            Children: i % 2,
+            space: 25 + i * 2,
+            bed: beds[i % beds.length],
+            description: `Mẫu phòng số ${id} - thiết kế hiện đại, tiện nghi.`,
+            price: 800000 + (i * 100000),
+            imgUrls: [
+                `https://picsum.photos/id/${1060 + i}/400/300`,
+                `https://picsum.photos/id/${1070 + i}/400/300`,
+            ],
+            services: ["Wi-Fi", ...(i % 3 === 0 ? ["Breakfast"] : [])],
+            roomType: types[i % types.length],
+            status: statuses[i % statuses.length],
+        };
+    }),
 ];
