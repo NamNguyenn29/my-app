@@ -5,25 +5,31 @@ interface MyBookingProps {
     start: Date;
     end: Date;
     room?: Room;
+    guest: number;
 }
 
 interface Room {
     id: number;
-    name: string;
+    roomName: string;
+    roomNumber: number;
+    isAvailable: boolean;
     guest: number;
     Adult: number;
     Children: number;
     space: number;
+    floor: number;
     bed: string;
-    description?: string;
+    description: string;
     price: number;
+    status: string;
+    roomType: string;
     imgUrls: string[];
     services: string[];
-    status: string,
-    roomType: string,
 }
 
-export default function MyBooking({ datedif, start, end, room }: MyBookingProps) {
+
+
+export default function MyBooking({ datedif, start, end, room, guest }: MyBookingProps) {
     const totalPrice = room ? room.price * datedif : 0;
 
     // Hàm chuyển số tháng sang chữ
@@ -61,13 +67,13 @@ export default function MyBooking({ datedif, start, end, room }: MyBookingProps)
                 {/* Room Info */}
                 {room ? (
                     <div className="flex flex-col items-center">
-                        <RoomSlider images={room.imgUrls} alt={room.name} />
-                        <div className="text-xl font-semibold">{room.name}</div>
+                        <RoomSlider images={room.imgUrls} alt={room.roomName} />
+                        <div className="text-xl font-semibold">{room.roomName}</div>
                         <div className="text-gray-600 text-lg">
-                            Guests: {room.guest} | {room.bed}
+                            Guests: {guest} | {room.bed}
                         </div>
                         <div className="text-gray-500 text-lg mt-1">
-                            {room.space} m² • wifi
+                            {room.space} m²
                         </div>
 
                         {/* Price */}

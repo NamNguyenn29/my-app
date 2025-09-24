@@ -22,6 +22,8 @@ export default function RootLayout() {
             [name]: value,
         })
     }
+
+
     return (
         <div>
             <div className="text-center font-semibold text-3xl my-10">My Profile</div>

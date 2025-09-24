@@ -1,11 +1,14 @@
 export const rooms = [
     {
         id: 1,
-        name: "Trav Lite Twin",
+        roomName: "Trav Lite Twin",
+        roomNumber: 101,
+        isAvailable: true,
         guest: 2,
         Adult: 2,
         Children: 0,
         space: 20,
+        floor: 1,
         bed: "2 single beds",
         description: "Phòng đôi gọn gàng, thoáng mát, thích hợp cho 2 người.",
         price: 1700000,
@@ -16,22 +19,19 @@ export const rooms = [
             "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
             "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
             "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-
         ],
-        services: [
-            "High wifi",
-            "Spa ",
-            "Gym",
-
-        ]
+        services: ["High wifi", "Spa", "Gym"],
     },
     {
         id: 2,
-        name: "Trav Deluxe King",
+        roomName: "Trav Deluxe King",
+        roomNumber: 102,
+        isAvailable: true,
         guest: 2,
         Adult: 2,
         Children: 0,
         space: 28,
+        floor: 1,
         bed: "1 king bed",
         description: "Phòng sang trọng với giường lớn, phù hợp cho cặp đôi.",
         price: 2500000,
@@ -42,48 +42,42 @@ export const rooms = [
             "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
             "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
             "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-
         ],
-        services: [
-            "High wifi",
-            "Spa ",
-            "Swimming pool",
-
-        ]
+        services: ["High wifi", "Spa", "Swimming pool"],
     },
     {
         id: 3,
-        name: "Trav Family Suite",
+        roomName: "Trav Family Suite",
+        roomNumber: 103,
+        isAvailable: true,
         guest: 4,
         Adult: 2,
         Children: 2,
         space: 40,
+        floor: 2,
         bed: "2 queen beds",
         description: "Phòng rộng rãi dành cho gia đình hoặc nhóm bạn.",
         price: 3500000,
         status: "active",
         roomType: "regular",
         imgUrls: [
-
             "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
             "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
             "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2"
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
         ],
-        services: [
-            "High wifi",
-            "Spa ",
-            "Rooftop bar",
-
-        ]
+        services: ["High wifi", "Spa", "Rooftop bar"],
     },
     {
         id: 4,
-        name: "Trav Penthouse",
+        roomName: "Trav Penthouse",
+        roomNumber: 104,
+        isAvailable: true,
         guest: 2,
         Adult: 2,
         Children: 0,
         space: 60,
+        floor: 3,
         bed: "1 king bed",
         description: "Phòng cao cấp với view toàn cảnh, tiện nghi hiện đại.",
         price: 5000000,
@@ -94,39 +88,34 @@ export const rooms = [
             "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
             "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
             "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-
         ],
-
-        services: [
-            "High wifi",
-            "Swimming pool ",
-            "Rooftop bar",
-            "Gym",
-
-        ]
+        services: ["High wifi", "Swimming pool", "Rooftop bar", "Gym"],
     },
     ...Array.from({ length: 20 }).map((_, i) => {
-        const id = i + 6;
+        const id = i + 5;
         const types = ["Deluxe", "Suite", "Standard", "Family"];
-        const statuses = ["Available", "Booked", "Maintenance"];
-        const beds = ["1 King Bed", "2 Single Beds", "2 Queen Beds", "3 Beds"];
+        const statuses = ["active", "inactive", "maintenance"];
+        const beds = ["1 king bed", "2 single beds", "2 queen beds", "3 beds"];
         return {
             id,
-            name: `${types[i % types.length]} Room #${id}`,
+            roomName: `${types[i % types.length]} Room #${id}`,
+            roomNumber: 100 + id,
+            isAvailable: i % 3 !== 1, // random available
             guest: 2 + (i % 5),
             Adult: 1 + (i % 3),
             Children: i % 2,
             space: 25 + i * 2,
+            floor: 1 + (i % 5),
             bed: beds[i % beds.length],
             description: `Mẫu phòng số ${id} - thiết kế hiện đại, tiện nghi.`,
-            price: 800000 + (i * 100000),
+            price: 800000 + i * 100000,
+            status: statuses[i % statuses.length],
+            roomType: types[i % types.length],
             imgUrls: [
                 `https://picsum.photos/id/${1060 + i}/400/300`,
                 `https://picsum.photos/id/${1070 + i}/400/300`,
             ],
             services: ["Wi-Fi", ...(i % 3 === 0 ? ["Breakfast"] : [])],
-            roomType: types[i % types.length],
-            status: statuses[i % statuses.length],
         };
     }),
 ];

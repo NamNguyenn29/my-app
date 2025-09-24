@@ -2,56 +2,30 @@
 import { useState } from "react";
 import "../globals.css";
 import { Modal, Box, Button } from "@mui/material";
-
+import { users } from "../data/user";
 type User = {
     id: number;
-    name: string;
+    fullName: string;
     email: string;
+    dateOfBirth: string;
+    adrress: string;
+    phone: string;
+    password: string;
     role: string;
     status: string;
+    activeCode: string;
+    isActived: boolean;
+    forgotPassword: string;
+    isDeleted: boolean;
     createddate: string;
     lastlogin: string;
+    createdDate: string;
 };
 export default function UserMangement() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const users = [
-        {
-            id: 1,
-            name: "Nguyen A",
-            email: "a.nguyen@gmail.com",
-            role: "admin",
-            status: "active",
-            createddate: "15/09/2025",
-            lastlogin: "1 days ago",
-        },
-        {
-            id: 2,
-            name: "Nguyen B",
-            email: "a.nguyen@gmail.com",
-            role: "admin",
-            status: "active",
-            createddate: "15/09/2025",
-            lastlogin: "1 days ago",
-        },
-        {
-            id: 3,
-            name: "Nguyen C",
-            email: "a.nguyen@gmail.com",
-            role: "admin",
-            status: "active",
-            createddate: "15/09/2025",
-            lastlogin: "1 days ago",
-        },
-        {
-            id: 4,
-            name: "Nguyen D",
-            email: "a.nguyen@gmail.com",
-            role: "admin",
-            status: "active",
-            createddate: "15/09/2025",
-            lastlogin: "1 days ago",
-        },
-    ]
+
+
+
 
     return (
         <>
@@ -91,7 +65,7 @@ export default function UserMangement() {
                         <tr key={u.id}>
                             <td className="px-4 py-2">{u.id}</td>
                             <td className=" px-4 py-2">
-                                <div className="font-semibold text-xl">{u.name}</div>
+                                <div className="font-semibold text-xl">{u.fullName}</div>
                                 <div className="text-">{u.email}</div>
                             </td>
                             <td className=" px-4 py-2">{u.role}</td>
@@ -131,10 +105,10 @@ export default function UserMangement() {
                         <div className="grid grid-cols-12 gap-10 text-xl">
                             <div className="rounded-lg col-span-5 bg-white p-10 h-100 flex gap-10 relative">
                                 <span className="bg-[rgb(238,242,255)] h-15 w-15 rounded-full text-center text-xl/15">
-                                    {selectedUser.name.substring(0, 2).toUpperCase()}
+                                    {selectedUser.fullName.substring(0, 2).toUpperCase()}
                                 </span>
                                 <span className="mt-4">
-                                    <div className="font-bold">{selectedUser.name}</div>
+                                    <div className="font-bold">{selectedUser.fullName}</div>
                                     <div>{selectedUser.email}</div>
                                     <div className="mt-4 px-3 py-2 rounded-full bg-green-300 w-24 text-center">
                                         {selectedUser.status}
@@ -166,7 +140,7 @@ export default function UserMangement() {
                                     <div className="col-span-4 ">
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">Full Name</div>
-                                            <div className="mb-5" >{selectedUser.name}</div>
+                                            <div className="mb-5" >{selectedUser.fullName}</div>
                                         </div>
                                     </div>
                                     <div className="col-span-4 ">
@@ -178,7 +152,7 @@ export default function UserMangement() {
                                     <div className="col-span-4 ">
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">Phone</div>
-                                            <div className="mb-5" >{selectedUser.name}</div>
+                                            <div className="mb-5" >{selectedUser.fullName}</div>
                                         </div>
                                     </div>
                                     <div className="col-span-8 ">
@@ -190,7 +164,7 @@ export default function UserMangement() {
                                     <div className="col-span-4 ">
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">Genders</div>
-                                            <div className="mb-5" >{selectedUser.name}</div>
+                                            <div className="mb-5" >{selectedUser.fullName}</div>
                                         </div>
                                     </div>
 

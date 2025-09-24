@@ -4,6 +4,7 @@ import "./globals.css";
 import "./lib/fontawesome";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { AuthProvider } from "./context/authContext"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,7 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        {children}
+        <AuthProvider>{children}</AuthProvider>
         <Footer />
       </body>
     </html>

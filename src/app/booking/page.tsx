@@ -1,9 +1,9 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children } from "react";
 import "../globals.css";
 import { FormControl, MenuItem, Select, Button } from "@mui/material";
 import DateBooking from "../components/DateBooking";
-import GuestBooking from "../components/GuestVBooking"
+import GuestBooking from "../components/GuestBooking"
 import { faRotateLeft, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
@@ -26,27 +26,35 @@ import RoomSlider from "../components/RoomSlider";
 import { Modal, Box } from "@mui/material";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import SelectedRoomBooking from "../components/SelectedRoomBooking";
 type Room = {
     id: number;
-    name: string;
-    guest: number,
-    Adult: number,
-    Children: number,
-    space: number,
-    bed: string,
-    description?: string,
-    price: number,
-    imgUrls: string[],
-    services: string[],
-    roomType: string,
-    status: string,
-}
+    roomName: string;
+    roomNumber: number;
+    isAvailable: boolean;
+    guest: number;
+    Adult: number;
+    Children: number;
+    space: number;
+    floor: number;
+    bed: string;
+    description: string;
+    price: number;
+    status: string;
+    roomType: string;
+    imgUrls: string[];
+    services: string[];
+};
+
 export default function Booking() {
     const [selectedRoomDetail, setSelectedRoomDetail] = useState<Room | null>(null);
     const [selectedRoom, setSelectedRoom] = useState<Room>();
     const searchParams = useSearchParams();
     const start = searchParams.get("start");
     const end = searchParams.get("end");
+    const roomName = searchParams.get("room");
+    const adultsParam = searchParams.get("adults");
+    const childrenParam = searchParams.get("children");
     const [range, setRange] = useState<Range[]>([
         {
             startDate: start ? new Date(start) : new Date(),
@@ -62,12 +70,19 @@ export default function Booking() {
         }
     }, [range]);
 
+    const [guest, setGuest] = useState({
+        Adult: adultsParam ? parseInt(adultsParam) : 2,
+        Children: childrenParam ? parseInt(childrenParam) : 0,
+    });
+
+    const [selectedRoomName, setSelectedRoomName] = useState<string | null>(roomName);
 
     return (
         <>
             <div className="text-center text-5xl text-white bg-black font-semibold  p-10">Booking Room</div>
             <div className="bg-[rgb(250,247,245)] mx-auto container py-5 ">
-                <div className="mx-20 mt-10 text-center p-5  w-80 bg-rose-500 rounded-full  text-white font-semibold text-xl">TRAVSAY Ho Chi Minh</div>
+                <SelectedRoomBooking selectedRoom={selectedRoomName || undefined}
+                    onChangeRoom={(roomName) => setSelectedRoomName(roomName)} />
                 <div className=" grid grid-cols-12 ">
                     <div className="col-span-4 text-center p-20">
                         <DateBooking
@@ -82,7 +97,10 @@ export default function Booking() {
                         />
                     </div>
                     <div className="col-span-4 text-center p-20">
-                        <GuestBooking />
+                        <GuestBooking
+                            guest={guest}
+                            onChangeGuest={(newGuest) => setGuest(newGuest)}
+                        />
                     </div>
                     <div className="col-span-4 text-center p-20 grid grid-cols-12">
                         <div className="col-span-4 bg-[rgb(217,217,217)]  text-center  text-lg/20 w-20 h-20 rounded-full">NN</div>
@@ -94,7 +112,7 @@ export default function Booking() {
                     </div>
                 </div>
             </div>
-            <div className="h-3 bg-rose-500 w-full mx-auto container  "></div>
+            <div className=" border border-b-1 border-rose-500 w-full mx-auto container  "></div>
 
             <div className="grid grid-cols-12 container mx-auto py-20 px-20 bg-[rgb(250,247,245)] gap-10">
                 {/* Danh sách room */}
@@ -103,10 +121,10 @@ export default function Booking() {
                         <div key={room.id} className="border border-none bg-white p-10 rounded-md">
                             <div className="grid grid-cols-12 gap-10">
                                 <div className="col-span-3 mt-10">
-                                    <RoomSlider images={room.imgUrls} alt={room.name} />
+                                    <RoomSlider images={room.imgUrls} alt={room.roomName} />
                                 </div>
                                 <div className="col-span-9">
-                                    <div className="text-rose-500 font-semibold underline mb-5">{room.name}</div>
+                                    <div className="text-rose-500 font-semibold underline mb-5">{room.roomName}</div>
                                     <div className="mb-5">
                                         <span className="bg-[rgb(243,244,246)] p-2 rounded-md">
                                             <FontAwesomeIcon icon={faUserFriends} size="lg" />
@@ -219,6 +237,7 @@ export default function Booking() {
                             start={range[0].startDate}
                             end={range[0].endDate}
                             room={selectedRoom}
+                            guest={guest.Adult + guest.Children}
                         />
                     </div>
                 </div>
@@ -237,7 +256,7 @@ export default function Booking() {
                     }}
                 >
                     {/* Title */}
-                    <h2 className="text-2xl font-bold mb-4">{selectedRoomDetail?.name}</h2>
+                    <h2 className="text-2xl font-bold mb-4">{selectedRoomDetail?.roomName}</h2>
 
                     {/* Slider + description */}
                     <div className="grid grid-cols-12 gap-6 mb-6">
@@ -246,7 +265,7 @@ export default function Booking() {
                                 <img
                                     key={index}
                                     src={url}
-                                    alt={`${selectedRoomDetail?.name} - ${index + 1}`}
+                                    alt={`${selectedRoomDetail?.roomName} - ${index + 1}`}
                                     className="w-60 h-40 object-cover rounded-lg shadow-md"
                                 />
                             ))}

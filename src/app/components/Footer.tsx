@@ -1,14 +1,22 @@
+'use client';
 import "../globals.css"
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 export default function Footer() {
+    const router = useRouter();
+
+    const handleClickLogo = () => {
+        router.push("/")
+    };
     return (
+
         <div className="bg-gray-900 text-white">
             <div className="container px-10 py-20">
                 <div className="grid grid-cols-6 gap-10">
                     <div className="col-span-2">
-                        <div className="w-48">
+                        <div onClick={() => handleClickLogo()} className="w-48 cursor-pointer">
                             <img src="logo.png" alt="" />
                         </div>
                         <div className="flex gap-10">
@@ -50,7 +58,7 @@ export default function Footer() {
                         </ul>
                     </div>
                     <div className="col-span-1 ">
-                        <div className="title text-3xl pt-20 mb-7">Quick Menu</div>
+                        <div className="title text-3xl pt-20 mb-7">Support</div>
                         <ul className='text-lg 
                             
                         '>

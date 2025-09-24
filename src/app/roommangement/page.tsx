@@ -4,22 +4,28 @@ import "../globals.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser } from "@fortawesome/free-solid-svg-icons";
 import { rooms as initialRooms } from "../data/room";
+import AddRoomModal from "../components/addroommodal";
 
 type Room = {
     id: number;
-    name: string;
+    roomName: string;
+    roomNumber: number;
+    isAvailable: boolean;
     guest: number;
     Adult: number;
     Children: number;
     space: number;
+    floor: number;
     bed: string;
-    description?: string;
+    description: string;
     price: number;
+    status: string;
+    roomType: string;
     imgUrls: string[];
     services: string[];
-    roomType: string;
-    status: string;
 };
+
+
 
 const roomTypes = ["Deluxe", "Suite", "Standard", "Family"];
 const statuses = ["Available", "Booked", "Maintenance"];
@@ -28,6 +34,7 @@ const bedOptions = ["1 King Bed", "2 Single Beds", "2 Queen Beds", "3 Beds"];
 
 export default function RoomManagement() {
 
+    const [isAddOpen, setIsAddOpen] = useState(false);
 
     const [rooms, setRooms] = useState<Room[]>(initialRooms);
     const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
@@ -78,6 +85,10 @@ export default function RoomManagement() {
         setFormData({ ...formData, imgUrls: updatedUrls });
     };
 
+    const handleRemove = (id: number) => {
+        setRooms((prev) => prev.filter((room) => room.id !== id));
+    };
+
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10); // mặc định 10 item/trang
 
@@ -91,9 +102,11 @@ export default function RoomManagement() {
 
     return (
         <>
+
             <div className="text-center text-5xl text-white bg-black font-semibold  p-10">
                 Booking Room Management
             </div>
+
             <div className="bg-[rgb(250,247,245)] mx-auto container py-5 ">
                 <div className="grid grid-cols-12">
                     <div className="col-start-9 col-span-4 text-center p-20 grid grid-cols-12">
@@ -114,8 +127,29 @@ export default function RoomManagement() {
                     </div>
                 </div>
             </div>
-            <div className="my-10 h-2 container mx-auto bg-black "></div>
+            <div className="my-10 border border-b-1 container mx-auto bg-black "></div>
+            <form className="flex justify-start gap-5 p-2  container mx-20 mb-10">
+                <input
+                    type="search"
+                    placeholder="Search by email, name, role ..."
+                    className="w-96 border p-2  rounded-md "
+                />
+                <button
+                    type="button"
+                    className="bg-rose-500  text-white text-xl font-semibold  px-4 py-1  rounded-md hover:bg-blue-600"
+                >
+                    Search
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setIsAddOpen(true)}
+                    className="bg-sky-900  text-white text-xl font-semibold  px-4 py-1  rounded-md hover:bg-blue-600"
+                >
+                    Add room
 
+                </button>
+
+            </form>
             {/* Table */}
             <table className="w-full container mx-auto my-10 text-base">
                 <thead className="bg-gray-100 text-left text-lg">
@@ -126,7 +160,7 @@ export default function RoomManagement() {
                         <th className="border-b-2 border-gray-400 px-4 py-2">Price</th>
                         <th className="border-b-2 border-gray-400 px-4 py-2">Status</th>
                         <th className="border-b-2 border-gray-400 px-4 py-2">Services</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Note</th>
+                        <th className="border-b-2 border-gray-400 px-4 py-2">Description</th>
                         <th className="border-b-2 border-gray-400 px-4 py-2">Bed</th>
                         <th className="border-b-2 border-gray-400 px-4 py-2">Guests</th>
                         <th className="border-b-2 border-gray-400 px-4 py-2">Space (m²)</th>
@@ -138,7 +172,7 @@ export default function RoomManagement() {
                     {currentRooms.map((room) => (
                         <tr key={room.id} className="hover:bg-gray-50">
                             <td className="px-4 py-2">{room.id}</td>
-                            <td className="px-4 py-2">{room.name}</td>
+                            <td className="px-4 py-2">{room.roomName}</td>
                             <td className="px-4 py-2">{room.roomType}</td>
                             <td className="px-4 py-2">{room.price.toLocaleString("vi-VN")} đ</td>
                             <td className="px-4 py-2">{room.status}</td>
@@ -153,12 +187,21 @@ export default function RoomManagement() {
                                 {room.imgUrls[0]}
                             </td>
                             <td className="px-4 py-2">
-                                <button
-                                    className="px-3 py-1 bg-green-500 text-white rounded"
-                                    onClick={() => handleEdit(room)}
-                                >
-                                    Edit
-                                </button>
+                                <div className="flex gap-3 mt-4">
+                                    <button
+                                        className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                                        onClick={() => handleEdit(room)}
+                                    >
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        className="px-4 py-2 bg-red-500 text-white rounded-md"
+                                        onClick={() => handleRemove(room.id)}
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}
@@ -178,8 +221,8 @@ export default function RoomManagement() {
                         <label className="block text-sm font-medium mb-1">Name</label>
                         <input
                             type="text"
-                            value={formData.name}
-                            onChange={(e) => handleChange("name", e.target.value)}
+                            value={formData.roomName}
+                            onChange={(e) => handleChange("roomName", e.target.value)}
                             className="w-full p-2 rounded-md border border-gray-300 mb-3"
                         />
 
@@ -398,6 +441,12 @@ export default function RoomManagement() {
                     </button>
                 </div>
             </div>
+            <AddRoomModal
+                isOpen={isAddOpen}
+                onClose={() => setIsAddOpen(false)}
+                onSave={(newRoom) => setRooms([...rooms, newRoom])}
+            />
+
 
         </>
     );
