@@ -3,13 +3,37 @@ import "../globals.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "../context/authContext"; // import auth
+
 
 export default function Header() {
 
+    const menu = [
+        { name: "HOTELS", href: "/" },
+        { name: "OURSERVICE", href: "/ourservice" },
+        { name: "EXPERIENCE WITH STRAVSTAY", href: "#" },
+        { name: "STRAVSTAY DISCOVERY", href: "#" },
+        { name: "CONTACT US", href: "/supportrequest" },
+    ]
+
+    const { user } = useAuth();
     const router = useRouter();
 
-    const handleClick = () => {
-        router.push("/userbooking");
+    const handleClickMemberLogin = () => {
+        if (!user) {
+            // chưa login thì đi sang login
+            router.push("/login");
+        } else {
+            // đã login → check role
+            if (user.role === "admin") {
+                router.push("/bookingmangement");
+            } else if (user.role === "user") {
+                router.push("/userbooking");
+            } else {
+                router.push("/");
+            }
+        }
     };
 
 
@@ -35,7 +59,7 @@ export default function Header() {
                                     after:h-[3px]
                                     after:bg-white
                                     after:transition-all
-                                    after:duration-300" onClick={() => handleClick()}>MEMBER LOGIN</div>
+                                    after:duration-300" onClick={() => handleClickMemberLogin()}>MEMBER LOGIN</div>
                 </div>
             </div>
             <div className="header-menu-group flex items-center justify-between w-full px-24 bg-white ">
@@ -43,15 +67,9 @@ export default function Header() {
 
                 <nav>
                     <ul className="main-menu flex gap-10 items-center">
-                        {[
-                            "HOTELS",
-                            "OURSERVICE",
-                            "EXPERIENCE WITH STRAVSTAY",
-                            "STRAVSTAY DISCOVERY",
-                            "CONTACT US"
-                        ].map((item) => (
-                            <li key={item}>
-                                <a href="#" className="
+                        {menu.map((item) => (
+                            <li key={item.name}>
+                                <Link href={item.href} className="
                                     font-semibold
                                     text-lg
                                     text-black
@@ -68,8 +86,8 @@ export default function Header() {
                                     after:duration-300
                                     py-2
                                     ">
-                                    {item}
-                                </a></li>
+                                    {item.name}
+                                </Link></li>
                         ))}
                     </ul>
                 </nav>

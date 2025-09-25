@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser } from "@fortawesome/free-solid-svg-icons";
 import { rooms as initialRooms } from "../data/room";
 import AddRoomModal from "../components/addroommodal";
+import RoleProtectedPage from "../components/roleprotectedPage";
+import UserMenu from "../components/UserMenu"
+import Pagination from "../components/Pagination";
 
 type Room = {
     id: number;
@@ -90,44 +93,24 @@ export default function RoomManagement() {
     };
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10); // mặc định 10 item/trang
+    const [itemsPerPage, setItemsPerPage] = useState(5);
 
     // Tính toán dữ liệu hiển thị
-    const indexOfLast = currentPage * rowsPerPage;
-    const indexOfFirst = indexOfLast - rowsPerPage;
+    const indexOfLast = currentPage * itemsPerPage;
+    const indexOfFirst = indexOfLast - itemsPerPage;
     const currentRooms = rooms.slice(indexOfFirst, indexOfLast);
 
-    const totalPages = Math.ceil(rooms.length / rowsPerPage);
+
 
 
     return (
-        <>
+        <RoleProtectedPage requiredRole="admin" redirectTo="/login" unauthorizedTo="/login">
 
-            <div className="text-center text-5xl text-white bg-black font-semibold  p-10">
-                Booking Room Management
+            <div className=" mx-auto container py-5 ">
+                <UserMenu />
             </div>
-
-            <div className="bg-[rgb(250,247,245)] mx-auto container py-5 ">
-                <div className="grid grid-cols-12">
-                    <div className="col-start-9 col-span-4 text-center p-20 grid grid-cols-12">
-                        <div className="col-span-4 bg-[rgb(217,217,217)] text-center text-lg/20 w-20 h-20 rounded-full">
-                            NN
-                        </div>
-                        <div className="col-span-4 text-left text-xl font-semibold pt-2">
-                            <div>Profile</div>
-                            <FontAwesomeIcon icon={faUser} size="xl" />
-                        </div>
-                        <div className="col-span-4 -ml-30 mt-5">
-                            <FontAwesomeIcon
-                                icon={faBars}
-                                size="2xl"
-                                className="item-self-center"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="my-10 border border-b-1 container mx-auto bg-black "></div>
+            <div className="mt-10 my-3 border border-b-1 container mx-auto bg-black "></div>
+            <div className="mx-20 font-semibold text-lg">DashBoard/ Room Mangement</div>
             <form className="flex justify-start gap-5 p-2  container mx-20 mb-10">
                 <input
                     type="search"
@@ -151,63 +134,73 @@ export default function RoomManagement() {
 
             </form>
             {/* Table */}
-            <table className="w-full container mx-auto my-10 text-base">
-                <thead className="bg-gray-100 text-left text-lg">
-                    <tr>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Room</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Room Name</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Room Type</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Price</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Status</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Services</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Description</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Bed</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Guests</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Space (m²)</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Image URL</th>
-                        <th className="border-b-2 border-gray-400 px-4 py-2">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentRooms.map((room) => (
-                        <tr key={room.id} className="hover:bg-gray-50">
-                            <td className="px-4 py-2">{room.id}</td>
-                            <td className="px-4 py-2">{room.roomName}</td>
-                            <td className="px-4 py-2">{room.roomType}</td>
-                            <td className="px-4 py-2">{room.price.toLocaleString("vi-VN")} đ</td>
-                            <td className="px-4 py-2">{room.status}</td>
-                            <td className="px-4 py-2">{room.services.join(", ")}</td>
-                            <td className="px-4 py-2">{room.description || "-"}</td>
-                            <td className="px-4 py-2">{room.bed}</td>
-                            <td className="px-4 py-2">
-                                {room.Adult} Adults, {room.Children} Children
-                            </td>
-                            <td className="px-4 py-2">{room.space} m²</td>
-                            <td className="px-4 py-2 truncate max-w-[200px]">
-                                {room.imgUrls[0]}
-                            </td>
-                            <td className="px-4 py-2">
-                                <div className="flex gap-3 mt-4">
-                                    <button
-                                        className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                                        onClick={() => handleEdit(room)}
-                                    >
-                                        Edit
-                                    </button>
-
-                                    <button
-                                        className="px-4 py-2 bg-red-500 text-white rounded-md"
-                                        onClick={() => handleRemove(room.id)}
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            </td>
+            {/* Table */}
+            <div className="container mx-auto my-10 bg-white rounded-xl shadow-lg overflow-hidden">
+                <table className="w-full text-base">
+                    <thead className="bg-gradient-to-r from-gray-100 to-gray-200 text-left text-gray-700 text-lg font-semibold">
+                        <tr>
+                            <th className="px-6 py-3">ID</th>
+                            <th className="px-6 py-3">Room Name</th>
+                            <th className="px-6 py-3">Room Type</th>
+                            <th className="px-6 py-3">Price</th>
+                            <th className="px-6 py-3">Status</th>
+                            <th className="px-6 py-3">Services</th>
+                            <th className="px-6 py-3">Description</th>
+                            <th className="px-6 py-3">Bed</th>
+                            <th className="px-6 py-3">Guests</th>
+                            <th className="px-6 py-3">Space</th>
+                            <th className="px-6 py-3">Image URL</th>
+                            <th className="px-6 py-3 text-center">Action</th>
                         </tr>
-                    ))}
-                </tbody>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                        {currentRooms.map((room) => (
+                            <tr key={room.id} className="hover:bg-gray-50 transition">
+                                <td className="px-6 py-3">{room.id}</td>
+                                <td className="px-6 py-3 font-medium text-gray-800">{room.roomName}</td>
+                                <td className="px-6 py-3">{room.roomType}</td>
+                                <td className="px-6 py-3 font-semibold text-blue-600">
+                                    {room.price.toLocaleString("vi-VN")} đ
+                                </td>
+                                <td className="px-6 py-3">
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-base font-medium
+                ${room.status === "Available"
+                                                ? "bg-green-100 text-green-700"
+                                                : room.status === "Booked"
+                                                    ? "bg-red-100 text-red-700"
+                                                    : "bg-yellow-100 text-yellow-700"
+                                            }`}
+                                    >
+                                        {room.status}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-3 text-base text-gray-600">
+                                    {room.services.join(", ")}
+                                </td>
+                                <td className="px-6 py-3 text-gray-500 truncate max-w-[150px]">
+                                    {room.description || "-"}
+                                </td>
+                                <td className="px-6 py-3">{room.bed}</td>
+                                <td className="px-6 py-3">
+                                    {room.Adult} Adults, {room.Children} Children
+                                </td>
+                                <td className="px-6 py-3">{room.space} m²</td>
+                                <td className="px-6 py-3 truncate max-w-[200px] text-blue-500">
+                                    {room.imgUrls[0]}
+                                </td>
+                                <td className="px-6 py-3 text-center">
+                                    <div className="flex justify-center gap-2">
+                                        <div className="bg-emerald-400 p-3 px-5 text-white rounded rounded-(200px)" onClick={() => handleEdit(room)}>Edit</div>
+                                        <div className="bg-rose-400 p-3 px-5 text-white rounded rounded-(200px)" onClick={() => handleRemove(room.id)} >Remove</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
-            </table>
 
             {/* Modal */}
             {formData && (
@@ -386,61 +379,13 @@ export default function RoomManagement() {
             )}
 
             {/* Pagination */}
-            <div className="flex items-center justify-between container mx-auto mt-5">
-                {/* Select rows per page */}
-                <div className="flex items-center gap-2">
-                    <select
-                        value={rowsPerPage}
-                        onChange={(e) => {
-                            setRowsPerPage(Number(e.target.value));
-                            setCurrentPage(1); // reset về trang 1 khi đổi page size
-                        }}
-                        className="border rounded px-2 py-1"
-                    >
-                        {[5, 10, 20, 50].map((size) => (
-                            <option key={size} value={size}>
-                                {size} / page
-                            </option>
-                        ))}
-                    </select>
-                    <span>
-                        {indexOfFirst + 1}-{Math.min(indexOfLast, rooms.length)} /{" "}
-                        {rooms.length}
-                    </span>
-                </div>
-
-                {/* Page numbers */}
-                <div className="flex items-center gap-2">
-                    <button
-                        disabled={currentPage === 1}
-                        onClick={() => setCurrentPage((prev) => prev - 1)}
-                        className="px-2 py-1 border rounded disabled:opacity-50"
-                    >
-                        {"<"}
-                    </button>
-
-                    {[...Array(totalPages)].map((_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => setCurrentPage(i + 1)}
-                            className={`px-3 py-1 border rounded ${currentPage === i + 1
-                                ? "bg-blue-500 text-white"
-                                : "bg-white"
-                                }`}
-                        >
-                            {i + 1}
-                        </button>
-                    ))}
-
-                    <button
-                        disabled={currentPage === totalPages}
-                        onClick={() => setCurrentPage((prev) => prev + 1)}
-                        className="px-2 py-1 border rounded disabled:opacity-50"
-                    >
-                        {">"}
-                    </button>
-                </div>
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalItems={rooms.length}
+                itemsPerPage={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={setItemsPerPage}
+            />
             <AddRoomModal
                 isOpen={isAddOpen}
                 onClose={() => setIsAddOpen(false)}
@@ -448,6 +393,6 @@ export default function RoomManagement() {
             />
 
 
-        </>
+        </RoleProtectedPage>
     );
 }

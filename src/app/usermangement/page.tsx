@@ -3,12 +3,16 @@ import { useState } from "react";
 import "../globals.css";
 import { Modal, Box, Button } from "@mui/material";
 import { users } from "../data/user";
+import RoleProtectedPage from "../components/roleprotectedPage";
+import UserMenu from "../components/UserMenu"
+import Pagination from "../components/Pagination";
+
 type User = {
     id: number;
     fullName: string;
     email: string;
     dateOfBirth: string;
-    adrress: string;
+    address: string;
     phone: string;
     password: string;
     role: string;
@@ -17,20 +21,48 @@ type User = {
     isActived: boolean;
     forgotPassword: string;
     isDeleted: boolean;
-    createddate: string;
+
     lastlogin: string;
     createdDate: string;
 };
 export default function UserMangement() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
+    const getDisplayStatus = (user: User) => {
+        if (user.isDeleted) return "deleted";      // ưu tiên Deleted
+        if (user.isActived) return "active";       // nếu active và chưa deleted
+        return "inactive";                         // không active và chưa deleted
+    }
 
+    const getStatusStyles = (status: string) => {
+        switch (status) {
+            case "active":
+                return "bg-green-100 text-green-700 border-green-400";
+            case "inactive":
+                return "bg-yellow-100 text-yellow-700 border-yellow-400";
+            case "deleted":
+                return "bg-red-100 text-red-700 border-red-400";
+            default:
+                return "bg-gray-100 text-gray-700 border-gray-400";
+        }
+    };
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+
+    // Tính toán dữ liệu hiển thị
+    const indexOfLast = currentPage * itemsPerPage;
+    const indexOfFirst = indexOfLast - itemsPerPage;
+    const currentRooms = users.slice(indexOfFirst, indexOfLast);
 
 
     return (
-        <>
-            <div className="text-center text-5xl text-white bg-black font-semibold  p-10">User Mangement</div>
-            <div className="my-20 h-2 container mx-auto bg-black "></div>
+        <RoleProtectedPage requiredRole="admin" redirectTo="/login" unauthorizedTo="/login">
+            <div className=" mx-auto container py-5 ">
+                <UserMenu />
+            </div>
+            <div className="mt-10 my-3 border border-b-1 container mx-auto bg-black "></div>
+            <div className="mx-20 font-semibold text-lg">DashBoard/ User Mangement</div>
             <form className="flex justify-start gap-5 p-2 w-96 container mx-20 mb-10">
                 <input
                     type="search"
@@ -70,9 +102,11 @@ export default function UserMangement() {
                             </td>
                             <td className=" px-4 py-2">{u.role}</td>
                             <td className=" px-4 py-2 ">
-                                <div className="bg-[rgb(236,254,255)] text-[rgb(3,105,161)] font-semibold border border-[rgb(6,182,212)] rounded rounded-md p-3 w-24 text-center">{u.status}</div>
+                                <div className={`font-semibold border rounded-md p-3 w-24 text-center ${getStatusStyles(getDisplayStatus(u))}`}>
+                                    {getDisplayStatus(u)}
+                                </div>
                             </td>
-                            <td className=" px-4 py-2">{u.createddate}</td>
+                            <td className=" px-4 py-2">{u.createdDate}</td>
                             <td className=" px-4 py-2">{u.lastlogin}</td>
                             <td className="flex gap-5 px-4 py-2 ">
                                 <div className="bg-emerald-400 p-3 px-5 text-white rounded rounded-(200px)" >Edit</div>
@@ -87,6 +121,14 @@ export default function UserMangement() {
                     ))}
                 </tbody>
             </table>
+            {/* Pagination */}
+            <Pagination
+                currentPage={currentPage}
+                totalItems={users.length}
+                itemsPerPage={itemsPerPage}
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={setItemsPerPage}
+            />
 
             <Modal open={!!selectedUser} onClose={() => setSelectedUser(null)}>
                 <Box
@@ -119,15 +161,15 @@ export default function UserMangement() {
                                     <div className="flex gap-20">
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">User ID</div>
-                                            <div className="mb-5"># {selectedUser.id}</div>
+                                            <div className="mb-5"> {selectedUser.id}</div>
                                             <div className="font-semibold text-sky-700 mb-2">Last login</div>
-                                            <div className="mb-5"># {selectedUser.id}</div>
+                                            <div className="mb-5"> {selectedUser.id}</div>
                                         </div>
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">Created Date</div>
-                                            <div className="mb-5"># {selectedUser.createddate}</div>
+                                            <div className="mb-5"> {selectedUser.createdDate}</div>
                                             <div className="font-semibold text-sky-700 mb-2">Date of Birth</div>
-                                            <div className="mb-5"># {selectedUser.id}</div>
+                                            <div className="mb-5"> {selectedUser.dateOfBirth}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -152,21 +194,21 @@ export default function UserMangement() {
                                     <div className="col-span-4 ">
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">Phone</div>
-                                            <div className="mb-5" >{selectedUser.fullName}</div>
+                                            <div className="mb-5" >{selectedUser.phone}</div>
                                         </div>
                                     </div>
                                     <div className="col-span-8 ">
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">Address</div>
-                                            <div className="mb-5" >{selectedUser.email}</div>
+                                            <div className="mb-5" >{selectedUser.address}</div>
                                         </div>
                                     </div>
-                                    <div className="col-span-4 ">
+                                    {/* <div className="col-span-4 ">
                                         <div>
                                             <div className="font-semibold text-sky-700 mb-2">Genders</div>
                                             <div className="mb-5" >{selectedUser.fullName}</div>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
@@ -186,6 +228,8 @@ export default function UserMangement() {
             </Modal>
 
 
-        </>
+
+
+        </RoleProtectedPage>
     )
 }

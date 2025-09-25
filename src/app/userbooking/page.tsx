@@ -1,14 +1,19 @@
 'use client'
 import "../globals.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import { bookings } from "../data/booking";
 import { rooms } from "../data/room";
 import { users } from "../data/user";
 import { useAuth } from "../context/authContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import RoomSlider from "../components/RoomSlider";
+import UserMenu from "../components/UserMenu";
+
 export default function UserBooking() {
+
+
+    // đóng menu khi click ra ngoài
+
     const { user, logout } = useAuth();
     const router = useRouter();
     useEffect(() => {
@@ -21,10 +26,6 @@ export default function UserBooking() {
         return null; // hoặc spinner loading
     }
 
-    const handleClickName = () => {
-        console.log("Click user name"); // test
-        router.push("/member")
-    };
 
     const getBookingList = (id: number) => bookings.filter(b => b.id === id);
 
@@ -33,40 +34,10 @@ export default function UserBooking() {
 
     const bookingsOfUser = getBookingList(user?.id);
 
-    const initials =
-        user?.name
-            ?.trim()                // xóa khoảng trắng 2 đầu
-            .split(/\s+/)            // tách theo khoảng trắng
-            .map(word => word[0]?.toUpperCase()) // lấy chữ cái đầu, nếu có
-            .join("") || "UN";       // fallback nếu trống
-
-
-
     return (
         <>
             <div className="bg-[rgb(250,247,245)] mx-auto container py-5 ">
-                <div className="grid grid-cols-12">
-                    <div className="col-start-9 col-span-4 p-6">
-                        <div className="flex items-center justify-end gap-4">
-                            <div className="w-20 h-20 rounded-full bg-[rgb(217,217,217)] flex items-center justify-center text-lg font-semibold select-none">
-                                {initials}
-                            </div>
-
-                            {/* Dùng button để chắc chắn nhận click */}
-                            <button
-                                type="button"
-                                onClick={handleClickName}
-                                className="text-left text-xl font-semibold underline cursor-pointer focus:outline-none"
-                            >
-                                {user.name}
-                            </button>
-
-                            <button type="button" className="p-2" aria-label="menu">
-                                <FontAwesomeIcon icon={faBars} size="2xl" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <UserMenu />
                 <div className="text-4xl mx-10 ">My Bookings</div>
             </div>
             <div className=" border border-b-1 container mx-auto bg-black "></div>
@@ -76,7 +47,7 @@ export default function UserBooking() {
                 <form className="-ml-1 flex justify-start gap-5 p-2  container mx-20 mb-10">
                     <input
                         type="search"
-                        placeholder="Search by email, name, role ..."
+                        placeholder="Search by room, Code, ..."
                         className="w-96 border p-2  rounded-md "
                     />
                     <button
@@ -98,31 +69,53 @@ export default function UserBooking() {
                             const user = getUser(booking.userID);
                             return (
                                 <>
-                                    <div className="my-10 grid grid-cols-12 border rounded-lg gap-10 px-10 py-10">
-                                        <div className="col-span-3 ">
-                                            <img src={room?.imgUrls[1]} alt="" />
-                                        </div>
-                                        <div className="col-span-3">
-                                            <div className="text-rose-500 font-bold text-2xl">{room?.roomName}</div>
-                                            <div className="text-lg font-semibold">Code : {booking.id}</div>
-                                            <div className="text-lg font-semibold">Guest : {user?.fullName}</div>
-                                            <div className="text-lg font-semibold">Room : {room?.roomType}</div>
+                                    <div className="my-8 rounded-xl shadow-lg bg-white p-6 hover:shadow-2xl transition-shadow">
+                                        <div className="flex gap-6">
+                                            {/* Ảnh slider */}
+                                            <div className="w-1/3">
+                                                <RoomSlider images={room?.imgUrls || []} alt={room?.roomName || "room"} />
+                                            </div>
 
-                                        </div>
-                                        <div className="col-span-3">
-                                            <div className=" font-semibold text-lg mt-8">Check-in: {booking.checkIn} - 14:00</div>
-                                            <div className=" font-semibold text-lg">Check-out: {booking.checkOut} - 12:00</div>
-                                            <div className=" font-semibold text-lg">Payment: {booking.price}đ </div>
-                                        </div>
-                                        <div className="col-span-3">
-                                            <div className={` mt-8 border rounded-md px-3 py-2 text-center font-semibold text-white  w-32
-                                              ${booking.status === "approved" ? "bg-green-500" : ""}
-      ${booking.status === "pending" ? "bg-yellow-500" : ""}
-      ${booking.status === "cancel" ? "bg-red-500" : ""}
-                                            `}>{booking.status}</div>
-                                            <div className="mt-4 border rounded-md px-3 py-2 text-center font-semibold text-white bg-blue-500 w-64">Download Invoice</div>
+                                            {/* Thông tin chính */}
+                                            <div className="w-2/3 flex flex-col justify-between">
+                                                {/* 2 cột thông tin */}
+                                                <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+                                                    {/* Trái */}
+                                                    <div>
+                                                        <h2 className="text-2xl font-bold text-rose-500 mb-2">{room?.roomName}</h2>
+                                                        <p className="text-gray-700 text-lg mb-2"><span className="font-semibold">Code:</span> {booking.id}</p>
+                                                        <p className="text-gray-700 text-lg mb-2"><span className="font-semibold">Guest:</span> {user?.fullName}</p>
+                                                        <p className="text-gray-700 text-lg mb-2"><span className="font-semibold">Room:</span> {room?.roomNumber}</p>
+                                                    </div>
+
+                                                    {/* Phải */}
+                                                    <div>
+                                                        <p className="text-gray-700 text-lg mb-2 mt-10"><span className="font-semibold">Check-in:</span> {booking.checkIn} - 14:00</p>
+                                                        <p className="text-gray-700 text-lg mb-2"><span className="font-semibold">Check-out:</span> {booking.checkOut} - 12:00</p>
+                                                        <p className="text-gray-700 text-lg mb-2"><span className="font-semibold">Payment:</span> <span className="text-rose-500">{booking.price.toLocaleString()} đ</span></p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Status + Nút */}
+                                                <div className="flex justify-end items-center gap-4 mt-6">
+                                                    <span
+                                                        className={`px-4 py-1 rounded-full text-md font-semibold text-white
+                                                            ${booking.status === "approved" ? "bg-green-500" : ""}
+                                                            ${booking.status === "pending" ? "bg-yellow-500" : ""}
+                                                            ${booking.status === "cancel" ? "bg-red-500" : ""}
+                                                        `}
+                                                    >
+                                                        {booking.status}
+                                                    </span>
+                                                    <button className="px-5 py-2 rounded-md font-semibold bg-blue-500 text-white hover:bg-blue-600 transition-colors">
+                                                        Download Invoice
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
+
                                 </>
                             )
                         })
