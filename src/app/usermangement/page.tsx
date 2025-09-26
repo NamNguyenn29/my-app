@@ -27,12 +27,18 @@ type User = {
 };
 export default function UserMangement() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const totalUsers = users.length;
+    const activeCount = users.filter(u => u.isActived && !u.isDeleted).length;
+    const inactiveCount = users.filter(u => !u.isActived && !u.isDeleted).length;
+    const deletedCount = users.filter(u => !u.isActived && u.isDeleted).length;
 
     const getDisplayStatus = (user: User) => {
         if (user.isDeleted) return "deleted";      // ưu tiên Deleted
         if (user.isActived) return "active";       // nếu active và chưa deleted
         return "inactive";                         // không active và chưa deleted
     }
+
+
 
     const getStatusStyles = (status: string) => {
         switch (status) {
@@ -50,10 +56,35 @@ export default function UserMangement() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
 
+    const [activeFilter, setActiveFilter] = useState<"all" | "active" | "inactive" | "deleted">("all");
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredByStatus = activeFilter === "all" ? users : users.filter(u => u.status === activeFilter);
+
+    const filteredUsers = filteredByStatus.filter((u) => {
+        if (!searchTerm.trim()) return true;
+        const name = u.fullName || "";
+        const email = u.email || "";
+        const role = u.role || "";
+        const id = u.id.toString();
+
+        return (
+            name.includes(searchTerm) ||
+            email.includes(searchTerm) ||
+            role.includes(searchTerm) ||
+            id.includes(searchTerm)
+
+        )
+    })
     // Tính toán dữ liệu hiển thị
     const indexOfLast = currentPage * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
-    const currentUsers = users.slice(indexOfFirst, indexOfLast);
+    const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
+
+    const handleFilterClick = (filter: "all" | "active" | "inactive" | "deleted") => {
+        setActiveFilter(filter);
+        setCurrentPage(1);
+    }
 
 
     return (
@@ -63,23 +94,72 @@ export default function UserMangement() {
             </div>
             <div className="mt-10 my-3 border border-b-1 container mx-auto bg-black "></div>
             <div className="mx-20 font-semibold text-lg">DashBoard/ User Mangement</div>
-            <form className="flex justify-start gap-5 p-2 w-96 container mx-20 mb-10">
+            {/* Search */}
+            <div className="flex justify-start gap-5 p-2  container mx-20 mb-10">
                 <input
                     type="search"
-                    placeholder="Search by email, name, role ..."
-                    className="flex-1 border p-2  rounded-md "
+                    placeholder="Search by id,name , email, role"
+                    className="w-96 border p-2  rounded-md "
+                    value={searchTerm}
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1); // reset về page 1 khi search
+                    }}
                 />
-                <button
-                    type="submit"
-                    className="bg-rose-500  text-white text-xl font-semibold  px-4 py-1  rounded-md hover:bg-blue-600"
-                >
-                    Search
-                </button>
-            </form>
-            <div className="flex gap-10 mx-auto container mb-10">
-                <div className="ml-2 !bg-rose-500 text-white font-semibold px-4">All</div>
-                <div className="ml-2 !bg-rose-500 text-white font-semibold px-4">Arrange: Created Date</div>
             </div>
+            {/* Summary box */}
+            <div className="flex gap-5 container mx-auto mb-10">
+                <div
+                    onClick={() => handleFilterClick("all")}
+                    className={`cursor-pointer flex flex-col items-center gap-2 border rounded-lg px-10 py-5 w-64 transition
+                        ${activeFilter === "all" ? "bg-blue-100 border-blue-500" : "hover:bg-gray-50"}`}
+                >
+                    <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 bg-blue-300 rounded-full inline-block "></span>
+                        <span className="inline-block w-32">Total User</span>
+                    </div>
+                    <span className="text-xl font-bold">{totalUsers}</span>
+                </div>
+
+                <div
+                    onClick={() => handleFilterClick("active")}
+                    className={`cursor-pointer flex flex-col items-center gap-2 border rounded-lg px-10 py-5 w-40 transition
+                        ${activeFilter === "active" ? "bg-green-100 border-green-500" : "hover:bg-gray-50"}`}
+                >
+                    <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 bg-green-300 rounded-full inline-block "></span>
+                        <span>active</span>
+                    </div>
+                    <span className="text-xl font-bold">{activeCount}</span>
+                </div>
+
+                <div
+                    onClick={() => handleFilterClick("inactive")}
+                    className={`cursor-pointer flex flex-col items-center gap-2 border rounded-lg px-10 py-5 w-40 transition
+                        ${activeFilter === "inactive" ? "bg-yellow-100 border-yellow-500" : "hover:bg-gray-50"}`}
+                >
+                    <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 bg-yellow-300 rounded-full inline-block "></span>
+                        <span>Inactive</span>
+                    </div>
+                    <span className="text-xl font-bold">{inactiveCount}</span>
+                </div>
+
+                <div
+                    onClick={() => handleFilterClick("deleted")}
+                    className={`cursor-pointer flex flex-col items-center gap-2 border rounded-lg px-10 py-5 w-40 transition
+                        ${activeFilter === "deleted" ? "bg-red-100 border-red-500" : "hover:bg-gray-50"}`}
+                >
+                    <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 bg-rose-300 rounded-full inline-block "></span>
+                        <span>Deleted</span>
+                    </div>
+                    <span className="text-xl font-bold">{deletedCount}</span>
+                </div>
+
+
+            </div>
+            {/* Table */}
             <table className=" w-full container mx-auto my-10 text-lg">
                 <thead >
                     <tr className="text-left ">
