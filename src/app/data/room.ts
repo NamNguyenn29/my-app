@@ -12,7 +12,7 @@ export const rooms = [
         bed: "2 single beds",
         description: "Phòng đôi gọn gàng, thoáng mát, thích hợp cho 2 người.",
         price: 1700000,
-        status: "active",
+        status: "available",
         roomType: "regular",
         imgUrls: [
             "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
@@ -35,7 +35,7 @@ export const rooms = [
         bed: "1 king bed",
         description: "Phòng sang trọng với giường lớn, phù hợp cho cặp đôi.",
         price: 2500000,
-        status: "active",
+        status: "unavailable",
         roomType: "regular",
         imgUrls: [
             "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
@@ -58,7 +58,7 @@ export const rooms = [
         bed: "2 queen beds",
         description: "Phòng rộng rãi dành cho gia đình hoặc nhóm bạn.",
         price: 3500000,
-        status: "active",
+        status: "available",
         roomType: "regular",
         imgUrls: [
             "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
@@ -81,7 +81,7 @@ export const rooms = [
         bed: "1 king bed",
         description: "Phòng cao cấp với view toàn cảnh, tiện nghi hiện đại.",
         price: 5000000,
-        status: "active",
+        status: "available",
         roomType: "regular",
         imgUrls: [
             "https://images.unsplash.com/photo-1590490360182-c33d57733427",
@@ -94,13 +94,13 @@ export const rooms = [
     ...Array.from({ length: 20 }).map((_, i) => {
         const id = i + 5;
         const types = ["Deluxe", "Suite", "Standard", "Family"];
-        const statuses = ["active", "inactive", "maintenance"];
         const beds = ["1 king bed", "2 single beds", "2 queen beds", "3 beds"];
+        const isAvailable = i % 3 !== 1; // random available
         return {
             id,
             roomName: `${types[i % types.length]} Room #${id}`,
             roomNumber: 100 + id,
-            isAvailable: i % 3 !== 1, // random available
+            isAvailable,
             guest: 2 + (i % 5),
             Adult: 1 + (i % 3),
             Children: i % 2,
@@ -109,7 +109,7 @@ export const rooms = [
             bed: beds[i % beds.length],
             description: `Mẫu phòng số ${id} - thiết kế hiện đại, tiện nghi.`,
             price: 800000 + i * 100000,
-            status: statuses[i % statuses.length],
+            status: isAvailable ? "available" : "unavailable",
             roomType: types[i % types.length],
             imgUrls: [
                 `https://picsum.photos/id/${1060 + i}/400/300`,

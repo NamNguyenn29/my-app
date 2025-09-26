@@ -53,7 +53,7 @@ export default function UserMangement() {
     // Tính toán dữ liệu hiển thị
     const indexOfLast = currentPage * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
-    const currentRooms = users.slice(indexOfFirst, indexOfLast);
+    const currentUsers = users.slice(indexOfFirst, indexOfLast);
 
 
     return (
@@ -93,7 +93,7 @@ export default function UserMangement() {
                     </tr>
                 </thead>
                 <tbody >
-                    {users.map((u) => (
+                    {currentUsers.map((u) => (
                         <tr key={u.id}>
                             <td className="px-4 py-2">{u.id}</td>
                             <td className=" px-4 py-2">

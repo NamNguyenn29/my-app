@@ -31,7 +31,7 @@ type Room = {
 
 
 const roomTypes = ["Deluxe", "Suite", "Standard", "Family"];
-const statuses = ["Available", "Booked", "Maintenance"];
+const statuses = ["Available", "unavailable", "all"];
 const allServices = ["Wi-Fi", "Pet Allowed", "Air conditioning", "Phone", "Breakfast"];
 const bedOptions = ["1 King Bed", "2 Single Beds", "2 Queen Beds", "3 Beds"];
 
@@ -95,13 +95,41 @@ export default function RoomManagement() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
 
+
+
+    const totalRoom = rooms.length;
+    const availableCount = rooms.filter(r => r.status === "available").length;
+    const unavailableCount = rooms.filter(r => r.status === 'unavailable').length;
+
+    const [SearchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState<"all" | "available" | "unavailable">("all");
+
+    const filteredByStatus = statusFilter === "all" ? rooms : rooms.filter(r => r.status === statusFilter);
+
+    const filteredRooms = filteredByStatus.filter((r) => {
+        if (!SearchTerm.trim()) return true;
+
+        const roomName = r.roomName?.toLocaleLowerCase() || "";
+        const roomNumber = r.roomNumber || "";
+        const roomId = r.id || "";
+
+        return (
+            roomId.toString().includes(SearchTerm) ||
+            roomNumber.toString().includes(SearchTerm) ||
+            roomName.includes(SearchTerm)
+
+        )
+    })
+
+    const handleFilterClick = (filter: "all" | "available" | "unavailable") => {
+        setStatusFilter(filter);
+        setCurrentPage(1);
+    }
+
     // Tính toán dữ liệu hiển thị
     const indexOfLast = currentPage * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
-    const currentRooms = rooms.slice(indexOfFirst, indexOfLast);
-
-
-
+    const currentRooms = filteredRooms.slice(indexOfFirst, indexOfLast);
 
     return (
         <RoleProtectedPage requiredRole="admin" redirectTo="/login" unauthorizedTo="/login">
@@ -111,18 +139,15 @@ export default function RoomManagement() {
             </div>
             <div className="mt-10 my-3 border border-b-1 container mx-auto bg-black "></div>
             <div className="mx-20 font-semibold text-lg">DashBoard/ Room Mangement</div>
-            <form className="flex justify-start gap-5 p-2  container mx-20 mb-10">
-                <input
-                    type="search"
-                    placeholder="Search by email, name, role ..."
-                    className="w-96 border p-2  rounded-md "
+            <div className="flex justify-start gap-5 p-2 container mx-20 mb-10">
+                <input type="search"
+                    placeholder="Search by id, roomNumber, roomName ... "
+                    className="border p-2 rouded-md w-96"
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1);
+                    }}
                 />
-                <button
-                    type="button"
-                    className="bg-rose-500  text-white text-xl font-semibold  px-4 py-1  rounded-md hover:bg-blue-600"
-                >
-                    Search
-                </button>
                 <button
                     type="button"
                     onClick={() => setIsAddOpen(true)}
@@ -131,9 +156,43 @@ export default function RoomManagement() {
                     Add room
 
                 </button>
+            </div>
+            {/*Search */}
 
-            </form>
-            {/* Table */}
+            {/*summary box */}
+            <div className="flex gap-5 container mx-auto mb-10">
+                <div
+                    onClick={() => handleFilterClick("all")}
+                    className={`cursor-pointer flex flex-col items-center gap-2 border rounded-lg px-10 py-5 w-64 transition ${statusFilter === "all" ? "bg-blue-100 border-blue-500 " : "hover:bg-gray-50"}`}>
+                    <div className="flex item-center gap-3">
+                        <span className="w-8 h-8 bg-blue-300 rounded-full inline-block"></span>
+                        <span className="inline-block w-32 ">Total Room</span>
+                    </div>
+                    <span>{totalRoom}</span>
+
+                </div>
+                <div
+                    onClick={() => handleFilterClick("available")}
+                    className={`cursor-pointer flex flex-col items-center gap-2 border rounded-lg px-10 py-5 w-64 transition ${statusFilter === "available" ? "bg-yellow-100 border-yellow-500 " : "hover:bg-gray-50"}`}>
+                    <div className="flex item-center gap-3">
+                        <span className="w-8 h-8 bg-green-300 rounded-full inline-block"></span>
+                        <span className="inline-block w-32 ">Available</span>
+                    </div>
+                    <span>{availableCount}</span>
+
+                </div>
+                <div
+                    onClick={() => handleFilterClick("unavailable")}
+                    className={`cursor-pointer flex flex-col items-center gap-2 border rounded-lg px-10 py-5 w-64 transition ${statusFilter === "available" ? "bg-yellow-100 border-yellow-500 " : "hover:bg-gray-50"}`}>
+                    <div className="flex item-center gap-3">
+                        <span className="w-8 h-8 bg-green-300 rounded-full inline-block"></span>
+                        <span className="inline-block w-32 ">Unavailable</span>
+                    </div>
+                    <span>{unavailableCount}</span>
+
+                </div>
+            </div>
+
             {/* Table */}
             <div className="container mx-auto my-10 bg-white rounded-xl shadow-lg overflow-hidden">
                 <table className="w-full text-base">
@@ -157,7 +216,8 @@ export default function RoomManagement() {
                         {currentRooms.map((room) => (
                             <tr key={room.id} className="hover:bg-gray-50 transition">
                                 <td className="px-6 py-3">{room.id}</td>
-                                <td className="px-6 py-3 font-medium text-gray-800">{room.roomName}</td>
+                                <td className="px-6 py-3 font-medium text-gray-800"><div>{room.roomName} - {room.roomNumber}</div>
+                                </td>
                                 <td className="px-6 py-3">{room.roomType}</td>
                                 <td className="px-6 py-3 font-semibold text-blue-600">
                                     {room.price.toLocaleString("vi-VN")} đ
