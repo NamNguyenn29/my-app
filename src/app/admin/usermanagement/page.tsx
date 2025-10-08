@@ -1,10 +1,10 @@
 "use client"
 import { useState, useEffect } from "react";
 import { Modal, Box, Button } from "@mui/material";
-import RoleProtectedPage from "../../../components/roleprotectedPage";
-import UserMenu from "../../../components/UserMenu";
-import Pagination from "../../../components/Pagination";
-import { User } from "../../../types/User";
+import RoleProtectedPage from "@/components/roleprotectedPage";
+import UserMenu from "@/components/UserMenu";
+import Pagination from "@/components/Pagination";
+import { User } from "@/types/User";
 import { getUsers } from "@/api/api";
 export default function UserMangement() {
     const [users, setUsers] = useState<User[]>([]);

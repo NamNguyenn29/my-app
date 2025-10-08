@@ -24,7 +24,7 @@ export default function Header() {
         } else {
             // đã login → check role
             if (user.roles.includes("Admin")) {
-                router.push("/admin/bookingmangement");
+                router.push("/admin/bookingmanagement");
             } else if (user.roles.includes("User")) {
                 router.push("/userbooking");
             } else {

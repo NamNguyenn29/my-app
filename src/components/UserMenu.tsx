@@ -81,7 +81,7 @@ export default function UserMenu() {
                                             Profile
                                         </button>
                                         <button
-                                            onClick={() => router.push("/admin/bookingmangement")}
+                                            onClick={() => router.push("/admin/bookingmanagement")}
                                             className="w-full text-left px-4 py-2 hover:bg-gray-100"
                                         >
                                             Booking Management

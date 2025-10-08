@@ -140,6 +140,23 @@ export default function RootLayout() {
                                     />
                                 </div>
                             </div>
+
+                        </div>
+                        <div>
+                            <div >
+                                <label htmlFor="phone">Phone</label>
+                                <div className="mt-5">
+                                    <TextField
+                                        className="p-20 w-100 bg-white"
+                                        id="phone"
+                                        name="phone"
+                                        variant="outlined"
+                                        value={form.phone}
+                                        onChange={handleChange}
+                                        disabled={!isEditing}
+                                    />
+                                </div>
+                            </div>
                             <div className="mt-10 mb-10">
                                 <label htmlFor="dob">Date of birth</label>
                                 <div className="mt-5">
@@ -149,22 +166,6 @@ export default function RootLayout() {
                                         name="dateOfBirth"
                                         variant="outlined"
                                         value={form.dateOfBirth}
-                                        onChange={handleChange}
-                                        disabled={!isEditing}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mt-10">
-                                <label htmlFor="phone">Phone</label>
-                                <div className="mt-5">
-                                    <TextField
-                                        className="p-20 w-100 bg-white"
-                                        id="phone"
-                                        name="phone"
-                                        variant="outlined"
-                                        value={form.phone}
                                         onChange={handleChange}
                                         disabled={!isEditing}
                                     />
