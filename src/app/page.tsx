@@ -1,6 +1,5 @@
 
-import "./globals.css";
-import BookingBox from "./components/BookingBox";
+import BookingBox from "../components/BookingBox";
 
 
 
