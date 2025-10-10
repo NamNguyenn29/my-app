@@ -45,7 +45,7 @@ export default function RoomSelector({ selectedRoom: initialRoom, onChangeRoom, 
     return (
         <div className="relative" ref={dropdownRef}>
             <label className="text-xl block text-left text-amber-500">Room</label>
-            <div onClick={toggleDropdown} className="cursor-pointer flex justify-between items-center bg-white text-black text-xl p-2">
+            <div onClick={toggleDropdown} className="cursor-pointer flex justify-between items-center bg-white text-black text-xl mt-2">
                 <span className="pr-5">{selectedRoom || "Selected Room"}</span>
                 <FontAwesomeIcon icon={faLocationDot} size="xs" color="black" />
             </div>

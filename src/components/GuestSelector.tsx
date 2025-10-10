@@ -66,7 +66,7 @@ export default function GuestSelector({ onChangeGuest }: GuestSelectorProps) {
             <label className="text-xl block text-left text-amber-500">Guest</label>
             <div
                 onClick={toggleDropdown}
-                className="cursor-pointer flex justify-between items-center bg-white text-black text-xl p-2"
+                className="cursor-pointer flex justify-between items-center bg-white text-black text-xl mt-2"
             >
                 <span className="pr-5">{adults} Adult{adults > 1 ? "s" : ""}, {children} Child{children > 1 ? "ren" : ""}</span>
                 <FontAwesomeIcon icon={faUserFriends} size="xs" color="black" />

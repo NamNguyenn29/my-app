@@ -59,8 +59,8 @@ export default function DatePicker({ onChangeRange }: DatePickerProps) {
         <div ref={dropdownRef}>
             <div className="relative w-72 " >
                 <label htmlFor="" className="text-xl block text-left text-amber-500 ">Dates</label>
-                <div onClick={() => setOpen(!open)} className="cursor-pointer flex justify-between items-center bg-white text-black text-xl ">
-                    <span className="pr-5" > {range[0].startDate && format(range[0].startDate, "dd/MM/yyyy")} -
+                <div onClick={() => setOpen(!open)} className="cursor-pointer flex justify-between items-center bg-white text-black text-xl mt-2 ">
+                    <span className="pr-" > {range[0].startDate && format(range[0].startDate, "dd/MM/yyyy")} -
                         {range[0].endDate && format(range[0].endDate, "dd/MM/yyyy")} </span>
                     <FontAwesomeIcon icon={faCalendar} size="xs" color="black" />
                 </div>

@@ -33,7 +33,7 @@ import { getRooms } from "@/api/api";
 import { filterRoom } from "@/api/api";
 
 export default function Booking() {
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const router = useRouter();
     const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
 
@@ -61,12 +61,12 @@ export default function Booking() {
 
     const pathname = usePathname(); // lấy path hiện tại
 
-    useEffect(() => {
-        if (!user) {
-            const target = `/login?returnUrl=${encodeURIComponent(pathname)}`;
-            router.replace(target);
-        }
-    }, [user, pathname]);
+    // useEffect(() => {
+    //     if (!user) {
+    //         const target = `/login?returnUrl=${encodeURIComponent(pathname)}`;
+    //         router.replace(target);
+    //     }
+    // }, [user, pathname]);
 
     useEffect(() => {
         if (range[0].startDate && range[0].endDate) {

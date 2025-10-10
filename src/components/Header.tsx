@@ -88,7 +88,7 @@ export default function Header() {
                         ))}
                     </ul>
                 </nav>
-                <div className="w-40 h-20 bg-rose-500 transform -skew-x-12 flex items-center justify-center text-xl hover:bg-blue-950  " >
+                <div className="w-40 h-20 bg-rose-500 transform -skew-x-12 flex items-center justify-center text-xl  " >
                     <span className="cursor-pointer skew-x-12 text-white font-semibold " onClick={() => handelClickBookNow()}>Book Now</span>
                 </div>
             </div>

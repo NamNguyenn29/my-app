@@ -47,7 +47,7 @@ export default function BookingBox() {
                 <div className="p-25 text-white text-6xl font-semibold text-center bg-black/25">
                     <div className="mt-20 mb-15">WellCOME TO TRAVSTAY</div>
                     <div>Your Gateway To Great Stays</div>
-                    <div className="mx-20 mt-40 h-[120px] bg-white flex justify-center gap-20 p-8">
+                    <div className="mx-20 mt-40 h-[120px] bg-white flex justify-center gap-20 p-8 ">
                         {/* RoomSelector */}
                         <RoomSelector
                             top="-top-75"

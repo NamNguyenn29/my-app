@@ -1,11 +1,9 @@
 
 
 import "../globals.css";
-import BookingBox from "../../components/BookingBox";
 export default function OurService() {
     return (
         <>
-            <BookingBox />
             <div className="font-bold text-5xl text-center my-10">OUR SERVICE</div>
             <div className="text-blue-900 text-center text-2xl mx-50">We want your stay at our lush hotel to be truly unforgettable.  That is why we give special attention to all of your needs so
                 that we can ensure an experience quite unique.</div>
